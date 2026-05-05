@@ -1,0 +1,1244 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="LP Mind">
+<title>LP Mind</title>
+<style>
+:root{
+  --bg:#07070f;--bg2:#0d0d1a;--bg3:#121220;--card:#18182a;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
+  --text:#eeeeff;--text2:#8888aa;--text3:#44445a;
+  --accent:#8b7cf8;--accent2:#a99fff;--accentbg:rgba(139,124,248,0.15);
+  --green:#2ecc71;--red:#ff4455;--amber:#f5a623;--blue:#4a9eff;--pink:#ff6b9d;
+  --r:14px;--rsm:9px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;min-height:100vh;overflow-x:hidden}
+
+/* ── SPLASH ── */
+#splash{position:fixed;inset:0;background:var(--bg);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .7s}
+#splash.out{opacity:0;pointer-events:none}
+.sp-ring{width:90px;height:90px;position:relative;margin-bottom:24px}
+.sp-ring svg{animation:spSpin 3s linear infinite}
+@keyframes spSpin{to{transform:rotate(360deg)}}
+.sp-inner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.sp-lp{font-size:22px;font-weight:800;color:var(--accent);line-height:1}
+.sp-sub{font-size:8px;font-weight:600;color:rgba(139,124,248,0.5);letter-spacing:.18em;margin-top:2px}
+.sp-title{font-size:24px;font-weight:800;color:var(--text)}
+.sp-desc{font-size:11px;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;margin-top:4px}
+.sp-bar{width:100px;height:2px;background:var(--bg3);border-radius:99px;margin-top:36px;overflow:hidden}
+.sp-prog{height:100%;background:var(--accent);border-radius:99px;animation:spLoad 2.5s ease forwards}
+@keyframes spLoad{from{width:0}to{width:100%}}
+
+/* ── NAV ── */
+.nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(7,7,15,.97);backdrop-filter:blur(20px);border-top:.5px solid var(--border2);display:flex;padding-bottom:env(safe-area-inset-bottom)}
+.nb{flex:1;display:flex;flex-direction:column;align-items:center;padding:10px 2px 8px;border:none;background:none;color:var(--text3);font-size:9px;font-weight:500;gap:3px;cursor:pointer;transition:color .2s;font-family:inherit}
+.nb.on{color:var(--accent2)}
+.ni{font-size:20px;line-height:1}
+
+/* ── PAGES ── */
+.pg{display:none;padding:0 16px 100px;max-width:480px;margin:0 auto}
+.pg.on{display:block}
+
+/* ── HEADER ── */
+.ph{padding:52px 0 20px}
+.pt{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:6px}
+.ptt{font-size:26px;font-weight:800;color:var(--text);line-height:1.1}
+.ps{font-size:13px;color:var(--text2);margin-top:6px;line-height:1.5}
+
+/* ── CARDS ── */
+.card{background:var(--card);border:.5px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:12px}
+.cl{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin-bottom:8px}
+.ct{font-size:15px;font-weight:700;color:var(--text);margin-bottom:5px}
+.cb{font-size:13px;color:var(--text2);line-height:1.65}
+
+/* ── BOXES ── */
+.box-ok{background:rgba(46,204,113,.08);border:.5px solid rgba(46,204,113,.22);border-radius:var(--rsm);padding:12px;font-size:12px;color:var(--green);line-height:1.6;margin-top:10px}
+.box-warn{background:rgba(245,166,35,.08);border:.5px solid rgba(245,166,35,.22);border-radius:var(--rsm);padding:12px;font-size:12px;color:var(--amber);line-height:1.6;margin-top:10px}
+.box-info{background:rgba(139,124,248,.08);border:.5px solid rgba(139,124,248,.22);border-radius:var(--rsm);padding:12px;font-size:12px;color:var(--accent2);line-height:1.6;margin-top:10px}
+.box-danger{background:rgba(255,68,85,.08);border:.5px solid rgba(255,68,85,.22);border-radius:var(--rsm);padding:12px;font-size:12px;color:var(--red);line-height:1.6;margin-top:10px}
+
+/* ── BUTTONS ── */
+.btn{display:block;width:100%;padding:15px;border-radius:var(--rsm);border:.5px solid var(--border2);background:var(--bg3);color:var(--text);font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;text-align:center;margin-bottom:8px}
+.btn.accent{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn.danger{background:var(--red);color:#fff;border-color:var(--red)}
+.btn.success{background:var(--green);color:#fff;border-color:var(--green)}
+.btn.ghost{background:none;color:var(--text2)}
+.btn:active{opacity:.75;transform:scale(.98)}
+.btn-sub{font-size:11px;font-weight:400;opacity:.65;display:block;margin-top:2px}
+
+/* ── DIVIDER ── */
+.div{height:.5px;background:var(--border);margin:14px 0}
+
+/* ── STREAK ── */
+.streak-row{display:flex;gap:5px;flex-wrap:wrap;margin-top:10px}
+.sday{width:36px;height:36px;border-radius:var(--rsm);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;border:.5px solid var(--border)}
+.sday.done{background:var(--accent);border-color:var(--accent);color:#fff}
+.sday.today{border-color:var(--accent2);color:var(--accent2)}
+.sday.empty{background:var(--bg3);color:var(--text3)}
+
+/* ── HALT ── */
+.halt-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.halt-card{background:var(--bg3);border:.5px solid var(--border);border-radius:var(--rsm);padding:14px;cursor:pointer;transition:all .2s;text-align:center;user-select:none}
+.halt-card.on{border-color:var(--accent);background:rgba(139,124,248,.12)}
+.halt-icon{font-size:26px;margin-bottom:5px}
+.halt-label{font-size:13px;font-weight:600;color:var(--text)}
+.halt-desc{font-size:11px;color:var(--text2);margin-top:3px;line-height:1.4}
+
+/* ── CONTRATO ── */
+.regla-item{background:var(--bg3);border-radius:var(--rsm);padding:12px 14px;margin-bottom:8px;display:flex;gap:10px;align-items:flex-start}
+.regla-check{width:22px;height:22px;border-radius:50%;border:.5px solid var(--border2);flex-shrink:0;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;font-size:12px;margin-top:1px}
+.regla-check.on{background:var(--green);border-color:var(--green);color:#fff}
+.regla-text{font-size:13px;color:var(--text);line-height:1.5}
+.regla-text.done{text-decoration:line-through;color:var(--text3)}
+
+/* ── FRASE ── */
+.frase-card{background:var(--bg3);border-radius:var(--rsm);padding:14px;margin-bottom:8px;border-left:3px solid var(--accent)}
+.frase-text{font-size:14px;color:var(--text);line-height:1.6;font-style:italic}
+.frase-meta{font-size:10px;color:var(--text3);margin-top:6px}
+
+/* ── BRAIN ── */
+.brain-svg{width:100%;max-width:320px;margin:0 auto;display:block}
+.bzone{cursor:pointer;transition:filter .2s}
+.bzone:hover{filter:brightness(1.3)}
+
+/* ── SCALES ── */
+.scale-row{display:flex;gap:4px;margin-top:8px}
+.scbtn{flex:1;padding:10px 0;border-radius:var(--rsm);border:.5px solid var(--border);background:var(--bg3);color:var(--text3);font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .2s;text-align:center}
+.scbtn.on{background:var(--accent);border-color:var(--accent);color:#fff}
+
+/* ── PATTERNS ── */
+.pbar{margin-bottom:12px}
+.prow{display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px}
+.pn{color:var(--text2)}
+.pv{font-weight:600;color:var(--text)}
+.ptrack{height:8px;background:var(--bg3);border-radius:99px;overflow:hidden}
+.pfill{height:100%;border-radius:99px;transition:width .6s ease}
+
+/* ── INPUTS ── */
+input[type=text],input[type=number],textarea,select{background:var(--bg3);border:.5px solid var(--border2);border-radius:var(--rsm);padding:10px 12px;color:var(--text);font-family:inherit;font-size:14px;outline:none;transition:border-color .2s;width:100%}
+input:focus,textarea:focus,select:focus{border-color:var(--accent)}
+textarea{resize:none}
+select option{background:var(--bg2)}
+
+/* ── TIMER ── */
+.timer-big{font-size:64px;font-weight:200;color:var(--red);text-align:center;font-variant-numeric:tabular-nums;margin:16px 0}
+.timer-med{font-size:48px;font-weight:300;color:var(--accent2);text-align:center;font-variant-numeric:tabular-nums;margin:14px 0 4px}
+.timer-ph{font-size:11px;color:var(--text2);text-align:center;letter-spacing:.06em;text-transform:uppercase}
+
+/* ── EMERGENCY OVERLAY ── */
+#emgOverlay{display:none;position:fixed;inset:0;background:rgba(7,7,15,.98);z-index:200;flex-direction:column;align-items:center;justify-content:center;padding:32px;text-align:center;overflow-y:auto}
+#emgOverlay.on{display:flex}
+.emg-pulse{width:100px;height:100px;border-radius:50%;background:rgba(255,68,85,.12);border:2px solid var(--red);display:flex;align-items:center;justify-content:center;font-size:40px;animation:emgPulse 1.5s ease-in-out infinite;margin-bottom:24px;flex-shrink:0}
+@keyframes emgPulse{0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(255,68,85,.3)}50%{transform:scale(1.05);box-shadow:0 0 0 20px rgba(255,68,85,0)}}
+.emg-step{background:var(--card);border-radius:var(--r);padding:14px 18px;width:100%;margin-bottom:10px;text-align:left}
+.emg-step-num{font-size:10px;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}
+.emg-step-text{font-size:14px;color:var(--text);line-height:1.5}
+.emg-btns{display:flex;gap:10px;margin-top:20px;width:100%}
+
+/* ── MODAL ── */
+.modal{display:none;position:fixed;inset:0;background:rgba(7,7,15,.97);z-index:150;overflow-y:auto;padding:24px 16px 100px}
+.modal.on{display:block}
+.modal-inner{max-width:480px;margin:0 auto}
+.modal-header{display:flex;align-items:center;gap:12px;margin-bottom:24px}
+.modal-back{background:none;border:none;color:var(--text2);font-size:26px;cursor:pointer;line-height:1;padding:0}
+
+/* ── STATS ── */
+.stat-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px}
+.stat-card{background:var(--bg3);border-radius:var(--rsm);padding:12px;text-align:center}
+.stat-val{font-size:24px;font-weight:800;color:var(--accent2)}
+.stat-label{font-size:11px;color:var(--text2);margin-top:2px}
+
+/* ── BADGE ── */
+.badge{display:inline-block;font-size:10px;font-weight:600;padding:3px 9px;border-radius:99px}
+.bg-green{background:rgba(46,204,113,.15);color:var(--green)}
+.bg-red{background:rgba(255,68,85,.15);color:var(--red)}
+.bg-accent{background:rgba(139,124,248,.15);color:var(--accent2)}
+.bg-amber{background:rgba(245,166,35,.15);color:var(--amber)}
+
+/* ── HABIT CHECK ── */
+.hitem{display:flex;gap:10px;align-items:center;padding:10px 0;border-bottom:.5px solid var(--border)}
+.hitem:last-child{border-bottom:none}
+.hcheck{width:22px;height:22px;border-radius:50%;border:.5px solid var(--border2);flex-shrink:0;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;font-size:12px}
+.hcheck.on{background:var(--green);border-color:var(--green);color:#fff}
+.hlabel{font-size:13px;color:var(--text)}
+.hlabel.done{text-decoration:line-through;color:var(--text3)}
+</style>
+</head>
+<body>
+
+<!-- ══ SPLASH ═══════════════════════════════════════════════ -->
+<div id="splash">
+  <div class="sp-ring">
+    <svg viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="45" cy="45" r="40" stroke="rgba(139,124,248,0.15)" stroke-width="2"/>
+      <path d="M45 5 A40 40 0 0 1 85 45" stroke="#8b7cf8" stroke-width="2" stroke-linecap="round"/>
+      <path d="M85 45 A40 40 0 0 1 45 85" stroke="rgba(139,124,248,0.4)" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+    <div class="sp-inner">
+      <div class="sp-lp">LP</div>
+      <div class="sp-sub">MIND</div>
+    </div>
+  </div>
+  <div class="sp-title">LP Mind</div>
+  <div class="sp-desc">Control · Consciencia · Cambio</div>
+  <div class="sp-bar"><div class="sp-prog"></div></div>
+</div>
+
+<!-- ══ PAGE: INICIO ══════════════════════════════════════════ -->
+<div id="pg-inicio" class="pg on">
+  <div class="ph">
+    <div class="pt">LP Mind · Tu aliado mental</div>
+    <div class="ptt">¿Cómo estás<br>ahora mismo?</div>
+    <div class="ps">Sin juicio. Solo honestidad.</div>
+  </div>
+
+  <button class="btn accent" onclick="showPage('proto',this,true)">
+    Voy a salir esta noche
+    <span class="btn-sub">Activar protocolo pre-salida</span>
+  </button>
+  <button class="btn danger" onclick="openEmergency()">
+    Necesito ayuda ahora
+    <span class="btn-sub">Emergencia · Estoy en el límite</span>
+  </button>
+  <button class="btn" onclick="openCheckin()">
+    Volví a casa
+    <span class="btn-sub">Check-in de regreso</span>
+  </button>
+
+  <div class="card" style="margin-top:4px">
+    <div class="cl">Racha de salidas conscientes</div>
+    <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:10px">
+      <span id="streakNum" style="font-size:38px;font-weight:800;color:var(--accent2)">0</span>
+      <span style="font-size:13px;color:var(--text2)">salidas donde te cuidaste</span>
+    </div>
+    <div class="streak-row" id="streakRow"></div>
+    <div style="font-size:11px;color:var(--text3);margin-top:8px">Cada salida consciente es un voto por la persona que querés ser.</div>
+  </div>
+
+  <div class="card">
+    <div class="cl">Tu frase de hoy</div>
+    <div id="dailyFrase" style="font-size:15px;color:var(--text);font-style:italic;line-height:1.65">"El control no es no salir. Es salir siendo vos."</div>
+    <div style="font-size:10px;color:var(--text3);margin-top:8px">Tu yo racional · escrito en un momento de claridad</div>
+  </div>
+
+  <div class="card">
+    <div class="cl">Estado de hoy</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
+      <div style="background:var(--bg3);border-radius:var(--rsm);padding:12px;text-align:center">
+        <div id="statEntreno" style="font-size:20px;margin-bottom:4px">—</div>
+        <div style="font-size:11px;color:var(--text2)">Entreno hoy</div>
+      </div>
+      <div style="background:var(--bg3);border-radius:var(--rsm);padding:12px;text-align:center">
+        <div id="statSueno" style="font-size:20px;margin-bottom:4px">—</div>
+        <div style="font-size:11px;color:var(--text2)">Horas de sueño</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button onclick="setToday('entreno')" style="flex:1;padding:9px;border-radius:var(--rsm);border:.5px solid var(--border2);background:none;color:var(--text2);font-size:12px;cursor:pointer;font-family:inherit">✓ Entrenaste</button>
+      <input type="number" id="suenoInput" placeholder="Hs sueño" min="0" max="12" step="0.5" style="flex:1" onchange="setToday('sueno')">
+    </div>
+  </div>
+</div>
+
+<!-- ══ PAGE: PROTOCOLO PRE-SALIDA ════════════════════════════ -->
+<div id="pg-proto" class="pg">
+  <div class="ph">
+    <div class="pt">Protocolo pre-salida · 4 pasos</div>
+    <div class="ptt">Antes de salir</div>
+    <div class="ps">10 minutos que cambian cómo vas a vivir esta noche.</div>
+  </div>
+
+  <!-- PASO 1: HALT -->
+  <div id="proto-1">
+    <div class="card">
+      <div class="cl">Paso 1 de 4 · Protocolo HALT</div>
+      <div class="ct">¿Qué estás sintiendo ahora?</div>
+      <div class="cb">HALT: Hungry · Angry · Lonely · Tired. El estado emocional real detrás del impulso de salir.</div>
+    </div>
+    <div class="halt-grid" id="haltGrid">
+      <div class="halt-card" onclick="toggleHalt(this,'hambre')"><div class="halt-icon">😮‍💨</div><div class="halt-label">Hambre</div><div class="halt-desc">Energía baja, no comí bien</div></div>
+      <div class="halt-card" onclick="toggleHalt(this,'enojo')"><div class="halt-icon">😤</div><div class="halt-label">Enojo / Frustración</div><div class="halt-desc">Algo me molestó hoy</div></div>
+      <div class="halt-card" onclick="toggleHalt(this,'soledad')"><div class="halt-icon">😶</div><div class="halt-label">Soledad</div><div class="halt-desc">Me siento desconectado</div></div>
+      <div class="halt-card" onclick="toggleHalt(this,'cansancio')"><div class="halt-icon">😴</div><div class="halt-label">Cansancio</div><div class="halt-desc">Dormí poco o me agotaron</div></div>
+    </div>
+    <div id="haltResult" style="margin-top:12px"></div>
+    <button class="btn accent" style="margin-top:14px" onclick="showProtoStep(2)">Continuar →</button>
+  </div>
+
+  <!-- PASO 2: CONTRATO -->
+  <div id="proto-2" style="display:none">
+    <div class="card">
+      <div class="cl">Paso 2 de 4 · Tu contrato</div>
+      <div class="ct">Tus reglas. Escritas por vos.</div>
+      <div class="cb">Las creaste cuando estabas en estado racional. Leelas ahora.</div>
+    </div>
+    <div id="contratoList"></div>
+    <button class="btn" style="margin-top:4px" onclick="openContratoModal()">
+      Editar mis reglas
+    </button>
+    <button class="btn accent" onclick="showProtoStep(3)">Leí mis reglas →</button>
+  </div>
+
+  <!-- PASO 3: IDENTIDAD -->
+  <div id="proto-3" style="display:none">
+    <div class="card">
+      <div class="cl">Paso 3 de 4 · Pregunta de identidad</div>
+      <div class="ct">Una sola pregunta.</div>
+    </div>
+    <div style="background:linear-gradient(135deg,rgba(139,124,248,.15),rgba(169,159,255,.05));border:.5px solid rgba(139,124,248,.3);border-radius:var(--r);padding:22px;text-align:center;margin-bottom:12px">
+      <div style="font-size:18px;font-weight:700;color:var(--text);line-height:1.35;margin-bottom:18px">"¿El LP de mañana va a estar orgulloso de cómo el LP de esta noche se manejó?"</div>
+      <div style="display:flex;gap:10px">
+        <button onclick="voteIdentity('si')" style="flex:1;padding:14px;border-radius:var(--rsm);border:none;background:var(--green);color:#fff;font-size:14px;font-weight:700;cursor:pointer">Sí, voy a cuidarme</button>
+        <button onclick="voteIdentity('ver')" style="flex:1;padding:14px;border-radius:var(--rsm);border:.5px solid var(--border2);background:var(--bg3);color:var(--text2);font-size:14px;font-weight:700;cursor:pointer">Lo voy a intentar</button>
+      </div>
+    </div>
+    <div id="voteResult"></div>
+  </div>
+
+  <!-- PASO 4: TUS FRASES -->
+  <div id="proto-4" style="display:none">
+    <div class="card">
+      <div class="cl">Paso 4 de 4 · Tu voz racional</div>
+      <div class="ct">Lo que vos mismo te dijiste</div>
+      <div class="cb">Estas frases las escribiste en momentos de claridad. Son tuyas.</div>
+    </div>
+    <div id="frasesProto"></div>
+    <button class="btn success" style="margin-top:8px" onclick="finishProtocol()">
+      Listo. Salgo consciente. ✓
+    </button>
+    <button class="btn ghost" onclick="showPage('inicio',null,false)">Cancelar salida</button>
+  </div>
+</div>
+
+<!-- ══ PAGE: CEREBRO ══════════════════════════════════════════ -->
+<div id="pg-cerebro" class="pg">
+  <div class="ph">
+    <div class="pt">Neurociencia · Lo que pasa adentro</div>
+    <div class="ptt">Tu cerebro</div>
+    <div class="ps">Tocá cada zona para entender qué la activa y qué la destruye.</div>
+  </div>
+
+  <!-- Brain SVG -->
+  <div class="card" style="padding:12px">
+    <svg class="brain-svg" viewBox="0 0 320 290" xmlns="http://www.w3.org/2000/svg">
+      <!-- Corteza Prefrontal -->
+      <ellipse cx="160" cy="52" rx="92" ry="36" fill="rgba(139,124,248,0.22)" stroke="rgba(139,124,248,0.55)" stroke-width="1.5" class="bzone" onclick="showBrain('prefrontal')"/>
+      <text x="160" y="49" font-family="sans-serif" font-size="11" font-weight="700" fill="#a99fff" text-anchor="middle">Corteza Prefrontal</text>
+      <text x="160" y="63" font-family="sans-serif" font-size="9" fill="rgba(169,159,255,0.65)" text-anchor="middle">Control de impulsos</text>
+      <!-- Sistema Límbico -->
+      <ellipse cx="160" cy="128" rx="68" ry="40" fill="rgba(255,68,85,0.14)" stroke="rgba(255,68,85,0.4)" stroke-width="1.5" class="bzone" onclick="showBrain('limbico')"/>
+      <text x="160" y="125" font-family="sans-serif" font-size="11" font-weight="700" fill="#ff4455" text-anchor="middle">Sistema Límbico</text>
+      <text x="160" y="139" font-family="sans-serif" font-size="9" fill="rgba(255,68,85,0.65)" text-anchor="middle">Impulsos y emociones</text>
+      <!-- Hipocampo -->
+      <ellipse cx="90" cy="162" rx="50" ry="26" fill="rgba(74,158,255,0.14)" stroke="rgba(74,158,255,0.4)" stroke-width="1.5" class="bzone" onclick="showBrain('hipocampo')"/>
+      <text x="90" y="159" font-family="sans-serif" font-size="10" font-weight="700" fill="#4a9eff" text-anchor="middle">Hipocampo</text>
+      <text x="90" y="172" font-family="sans-serif" font-size="8" fill="rgba(74,158,255,0.65)" text-anchor="middle">Memoria</text>
+      <!-- Amígdala -->
+      <ellipse cx="230" cy="162" rx="50" ry="26" fill="rgba(245,166,35,0.14)" stroke="rgba(245,166,35,0.4)" stroke-width="1.5" class="bzone" onclick="showBrain('amigdala')"/>
+      <text x="230" y="159" font-family="sans-serif" font-size="10" font-weight="700" fill="#f5a623" text-anchor="middle">Amígdala</text>
+      <text x="230" y="172" font-family="sans-serif" font-size="8" fill="rgba(245,166,35,0.65)" text-anchor="middle">Miedo · Amenaza</text>
+      <!-- Núcleo Accumbens -->
+      <ellipse cx="160" cy="212" rx="54" ry="28" fill="rgba(255,107,157,0.14)" stroke="rgba(255,107,157,0.4)" stroke-width="1.5" class="bzone" onclick="showBrain('accumbens')"/>
+      <text x="160" y="209" font-family="sans-serif" font-size="10" font-weight="700" fill="#ff6b9d" text-anchor="middle">Núcleo Accumbens</text>
+      <text x="160" y="222" font-family="sans-serif" font-size="8" fill="rgba(255,107,157,0.65)" text-anchor="middle">Recompensa · Dopamina</text>
+      <!-- Cerebelo -->
+      <ellipse cx="160" cy="262" rx="62" ry="20" fill="rgba(46,204,113,0.12)" stroke="rgba(46,204,113,0.35)" stroke-width="1.5" class="bzone" onclick="showBrain('cerebelo')"/>
+      <text x="160" y="266" font-family="sans-serif" font-size="10" font-weight="700" fill="#2ecc71" text-anchor="middle">Cerebelo · Coordinación</text>
+      <!-- Connections -->
+      <line x1="160" y1="88" x2="160" y2="88" stroke="rgba(139,124,248,0.25)" stroke-width="1" stroke-dasharray="3,2"/>
+      <line x1="118" y1="128" x2="102" y2="148" stroke="rgba(74,158,255,0.25)" stroke-width="1" stroke-dasharray="3,2"/>
+      <line x1="202" y1="128" x2="218" y2="148" stroke="rgba(245,166,35,0.25)" stroke-width="1" stroke-dasharray="3,2"/>
+      <line x1="160" y1="168" x2="160" y2="184" stroke="rgba(255,107,157,0.25)" stroke-width="1" stroke-dasharray="3,2"/>
+      <line x1="160" y1="240" x2="160" y2="242" stroke="rgba(46,204,113,0.25)" stroke-width="1" stroke-dasharray="3,2"/>
+    </svg>
+  </div>
+
+  <!-- Info panel -->
+  <div id="brainPanel" style="display:none">
+    <div class="card">
+      <div class="cl" id="brainPanelZone">Zona cerebral</div>
+      <div class="ct" id="brainPanelTitle"></div>
+      <div class="cb" id="brainPanelBody" style="margin-bottom:10px"></div>
+      <div id="brainPanelEffects"></div>
+    </div>
+  </div>
+
+  <!-- Comparativa fija -->
+  <div class="card">
+    <div class="cl">Comparativa rápida</div>
+    <div style="margin-bottom:10px">
+      <div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:5px">✓ Cuando entrenás</div>
+      <div style="font-size:12px;color:var(--text2);line-height:1.65">Corteza prefrontal se fortalece → más control de impulsos. Hipocampo crece → mejor memoria. Dopamina sana → motivación sin abstinencia. Cortisol baja → menos ansiedad. La sertralina actúa mejor.</div>
+    </div>
+    <div class="div"></div>
+    <div style="margin-bottom:10px">
+      <div style="font-size:12px;font-weight:700;color:var(--red);margin-bottom:5px">✗ Cuando no entrenás</div>
+      <div style="font-size:12px;color:var(--text2);line-height:1.65">Cortisol sube → destruye músculo y aumenta ansiedad. Dopamina basal baja → mayor atracción hacia consumo. Amígdala se reactiva más. El clonazepam tiene que compensar más.</div>
+    </div>
+    <div class="div"></div>
+    <div style="margin-bottom:10px">
+      <div style="font-size:12px;font-weight:700;color:var(--amber);margin-bottom:5px">⚠ Alcohol en exceso</div>
+      <div style="font-size:12px;color:var(--text2);line-height:1.65">Inhibe la corteza prefrontal → control de impulsos a 0. Potencia el clonazepam peligrosamente. Al día siguiente: cortisol elevado 48–72hs, síntesis muscular frenada, sertralina menos efectiva.</div>
+    </div>
+    <div class="div"></div>
+    <div>
+      <div style="font-size:12px;font-weight:700;color:var(--pink);margin-bottom:5px">⚠ MDMA + sertralina</div>
+      <div style="font-size:12px;color:var(--text2);line-height:1.65">Agota toda la serotonina disponible de golpe. Con sertralina: el efecto se reduce Y la depleción post-consumo es mayor. 3–7 días de serotonina muy baja = ánimo en el piso, control de impulsos reducido. El músculo no crece en ese período.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PAGE: HÁBITOS ══════════════════════════════════════════ -->
+<div id="pg-habitos" class="pg">
+  <div class="ph">
+    <div class="pt">James Clear · Hábitos Atómicos · Tu versión</div>
+    <div class="ptt">Hábitos</div>
+    <div class="ps">No el libro. Tu sistema. Para tu contexto.</div>
+  </div>
+
+  <!-- 4 Leyes resumidas -->
+  <div class="card">
+    <div class="cl">Las 4 leyes — aplicadas a vos</div>
+    <div style="margin-bottom:12px">
+      <div style="font-size:13px;font-weight:700;color:var(--accent2);margin-bottom:4px">1. Hacerlo obvio</div>
+      <div style="font-size:12px;color:var(--text2);line-height:1.6">La bolsa del gym preparada la noche anterior. La creatina al lado del vaso de agua. El Whey visible. Si tenés que buscar las cosas → no vas. Si están ahí → vas.</div>
+    </div>
+    <div class="div"></div>
+    <div style="margin-bottom:12px">
+      <div style="font-size:13px;font-weight:700;color:var(--accent2);margin-bottom:4px">2. Hacerlo atractivo</div>
+      <div style="font-size:12px;color:var(--text2);line-height:1.6">Solo escuchás tu playlist favorita cuando entrenás. El cerebro hace lo que anticipa como recompensa — no lo que sabe que es bueno.</div>
+    </div>
+    <div class="div"></div>
+    <div style="margin-bottom:12px">
+      <div style="font-size:13px;font-weight:700;color:var(--accent2);margin-bottom:4px">3. Hacerlo fácil</div>
+      <div style="font-size:12px;color:var(--text2);line-height:1.6">No decidís si vas al gym — solo a qué hora. No llevés más efectivo del que decidiste en frío. Reducí la fricción para hábitos buenos, aumentala para hábitos que querés evitar.</div>
+    </div>
+    <div class="div"></div>
+    <div>
+      <div style="font-size:13px;font-weight:700;color:var(--accent2);margin-bottom:4px">4. Hacerlo satisfactorio</div>
+      <div style="font-size:12px;color:var(--text2);line-height:1.6">La racha visual es el placer inmediato. Cada salida consciente registrada es evidencia de identidad. Clear: "No busques motivación. Buscá identidad. Cada acción es un voto."</div>
+    </div>
+  </div>
+
+  <!-- Hábitos del día -->
+  <div class="card">
+    <div class="cl">Hábitos de hoy — tocá para marcar</div>
+    <div id="habitListMind"></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px">
+      <div id="habitScoreMind" style="font-size:13px;color:var(--text2)">Score: 0/6</div>
+      <button onclick="saveHabitsMind()" style="padding:9px 16px;border-radius:var(--rsm);border:none;background:var(--accent);color:#fff;font-weight:700;cursor:pointer;font-size:13px">Guardar ✓</button>
+    </div>
+  </div>
+
+  <!-- Tus frases -->
+  <div class="card">
+    <div class="cl">Tus frases — escritas en momentos de claridad</div>
+    <div id="frasesContainer"></div>
+    <div style="margin-top:12px">
+      <textarea id="nuevaFrase" rows="2" placeholder="Escribí algo que el LP de mañana necesita leer..."></textarea>
+      <button class="btn accent" style="margin-top:8px" onclick="guardarFrase()">Guardar esta frase</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PAGE: ESTADÍSTICAS ═════════════════════════════════════ -->
+<div id="pg-stats" class="pg">
+  <div class="ph">
+    <div class="pt">Datos · Patrones · Para tu psicóloga</div>
+    <div class="ptt">Estadísticas</div>
+    <div class="ps">Todo lo que registrás queda guardado. Tus patrones reales.</div>
+  </div>
+  <div id="statsContainer"></div>
+</div>
+
+<!-- ══ NAV ════════════════════════════════════════════════════ -->
+<nav class="nav">
+  <button class="nb on" onclick="showPage('inicio',this,false)"><span class="ni">🏠</span>Inicio</button>
+  <button class="nb" onclick="showPage('proto',this,true)"><span class="ni">🛡️</span>Pre-salida</button>
+  <button class="nb" onclick="showPage('cerebro',this,false)"><span class="ni">🧠</span>Cerebro</button>
+  <button class="nb" onclick="showPage('habitos',this,false)"><span class="ni">⚡</span>Hábitos</button>
+  <button class="nb" onclick="showPage('stats',this,false)"><span class="ni">📈</span>Stats</button>
+</nav>
+
+<!-- ══ EMERGENCY OVERLAY ══════════════════════════════════════ -->
+<div id="emgOverlay">
+  <div class="emg-pulse">🧠</div>
+  <div style="font-size:22px;font-weight:800;color:var(--text);margin-bottom:8px">Estás en el límite.</div>
+  <div style="font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:24px">No es debilidad. Es el sistema límbico superando a la corteza prefrontal. Tenés 60 segundos para recuperar el control.</div>
+  <div class="emg-step"><div class="emg-step-num">Ahora mismo</div><div class="emg-step-text">Poné los dos pies en el piso. Sentí el peso de tu cuerpo.</div></div>
+  <div class="emg-step"><div class="emg-step-num">Respiración</div><div class="emg-step-text">Inspirá 4 segundos. Retené 4. Expulsá 6. Una vez.</div></div>
+  <div class="timer-big" id="emgTimer">60</div>
+  <div class="emg-step" style="border-left:3px solid var(--accent);background:rgba(139,124,248,0.08)"><div class="emg-step-num">La pregunta</div><div class="emg-step-text">"¿Qué elijo ser yo en este momento?"</div></div>
+  <div class="emg-btns">
+    <button class="btn success" style="flex:1;margin:0" onclick="closeEmergency('ok')">Recuperé el control</button>
+    <button class="btn" style="flex:1;margin:0" onclick="closeEmergency('call')">Llamar a alguien</button>
+  </div>
+</div>
+
+<!-- ══ MODAL: CHECK-IN ════════════════════════════════════════ -->
+<div id="checkinModal" class="modal">
+  <div class="modal-inner">
+    <div class="modal-header">
+      <button class="modal-back" onclick="closeCheckin()">←</button>
+      <div style="font-size:18px;font-weight:800;color:var(--text)">Check-in de regreso</div>
+    </div>
+    <div style="margin-bottom:16px">
+      <div style="font-size:13px;color:var(--text2);margin-bottom:8px">¿Cómo te manejaste esta noche?</div>
+      <div class="scale-row" id="controlScale">
+        <button class="scbtn" onclick="setScale('control',1,this)">1<br><span style="font-size:9px">Perdí el control</span></button>
+        <button class="scbtn" onclick="setScale('control',2,this)">2</button>
+        <button class="scbtn" onclick="setScale('control',3,this)">3<br><span style="font-size:9px">Regular</span></button>
+        <button class="scbtn" onclick="setScale('control',4,this)">4</button>
+        <button class="scbtn" onclick="setScale('control',5,this)">5<br><span style="font-size:9px">Me cuidé</span></button>
+      </div>
+    </div>
+    <div style="margin-bottom:16px">
+      <div style="font-size:13px;color:var(--text2);margin-bottom:8px">¿Cumpliste tus reglas?</div>
+      <div style="display:flex;gap:6px">
+        <button class="scbtn" onclick="setScale('reglas','no',this)" style="flex:none;padding:10px 18px">No</button>
+        <button class="scbtn" onclick="setScale('reglas','parcial',this)" style="flex:none;padding:10px 18px">Parcialmente</button>
+        <button class="scbtn" onclick="setScale('reglas','si',this)" style="flex:none;padding:10px 18px">Sí</button>
+      </div>
+    </div>
+    <div style="margin-bottom:16px">
+      <div style="font-size:13px;color:var(--text2);margin-bottom:8px">¿Qué disparador sentiste antes? (HALT)</div>
+      <div class="halt-grid" id="haltCheckinGrid">
+        <div class="halt-card" onclick="toggleHaltCheckin(this,'hambre')"><div class="halt-icon" style="font-size:20px">😮‍💨</div><div class="halt-label" style="font-size:12px">Hambre</div></div>
+        <div class="halt-card" onclick="toggleHaltCheckin(this,'enojo')"><div class="halt-icon" style="font-size:20px">😤</div><div class="halt-label" style="font-size:12px">Enojo</div></div>
+        <div class="halt-card" onclick="toggleHaltCheckin(this,'soledad')"><div class="halt-icon" style="font-size:20px">😶</div><div class="halt-label" style="font-size:12px">Soledad</div></div>
+        <div class="halt-card" onclick="toggleHaltCheckin(this,'cansancio')"><div class="halt-icon" style="font-size:20px">😴</div><div class="halt-label" style="font-size:12px">Cansancio</div></div>
+      </div>
+    </div>
+    <div style="margin-bottom:16px">
+      <div style="font-size:13px;color:var(--text2);margin-bottom:8px">Nota personal (opcional)</div>
+      <textarea id="checkinNota" rows="3" placeholder="Lo que pasó, cómo te sentís, qué aprendiste..."></textarea>
+    </div>
+    <button class="btn accent" onclick="saveCheckin()">Guardar check-in</button>
+  </div>
+</div>
+
+<!-- ══ MODAL: CONTRATO ════════════════════════════════════════ -->
+<div id="contratoModal" class="modal">
+  <div class="modal-inner">
+    <div class="modal-header">
+      <button class="modal-back" onclick="closeContratoModal()">←</button>
+      <div style="font-size:18px;font-weight:800;color:var(--text)">Mis reglas</div>
+    </div>
+    <div class="cb" style="margin-bottom:16px">Estas son TUS reglas. Escritas cuando estabas en estado racional. En el momento del impulso, tu yo racional habla a través de ellas.</div>
+    <div id="contratoEditList"></div>
+    <div style="margin-top:12px">
+      <input type="text" id="nuevaRegla" placeholder="Agregar nueva regla...">
+      <button class="btn accent" style="margin-top:8px" onclick="agregarRegla()">Agregar regla</button>
+    </div>
+    <button class="btn ghost" onclick="closeContratoModal()" style="margin-top:4px">Cerrar</button>
+  </div>
+</div>
+
+<script>
+// ══ STORAGE ═════════════════════════════════════════════════
+const KEY = 'lpmind_v2';
+const DEFAULTS = {
+  streak: 0,
+  salidas: [],
+  frases: [
+    "Cuando llego al límite, siempre me arrepiento. No vale la resaca de tres días contra veinte minutos de euforia.",
+    "El gym, el sistema, todo lo que construí — vale más que una noche sin control."
+  ],
+  reglas: [
+    "Máximo 3 tragos durante toda la noche.",
+    "No mezclo alcohol con clonazepam el mismo día.",
+    "Si consumo MDMA, no tomo sertralina ese día.",
+    "Salgo con efectivo limitado — decidido antes de salir.",
+    "Tengo definida la hora de vuelta antes de salir."
+  ],
+  habitos: { entreno:false, proteina:false, creatina:false, agua:false, meditacion:false, sueno:false },
+  habitosHistorial: [],
+  habitosFecha: '',
+  todayEntreno: false,
+  todaySueno: null,
+  todayFecha: ''
+};
+
+function load() {
+  try {
+    const raw = localStorage.getItem(KEY);
+    if (!raw) return JSON.parse(JSON.stringify(DEFAULTS));
+    return Object.assign(JSON.parse(JSON.stringify(DEFAULTS)), JSON.parse(raw));
+  } catch(e) { return JSON.parse(JSON.stringify(DEFAULTS)); }
+}
+
+function save() {
+  try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e) {}
+}
+
+let S = load();
+
+// Reset diario
+(function dayCheck() {
+  const today = new Date().toISOString().split('T')[0];
+  if (S.habitosFecha !== today) {
+    if (S.habitosFecha) {
+      S.habitosHistorial.push({ fecha: S.habitosFecha, ...S.habitos });
+      if (S.habitosHistorial.length > 90) S.habitosHistorial.shift();
+    }
+    S.habitos = { entreno:false, proteina:false, creatina:false, agua:false, meditacion:false, sueno:false };
+    S.habitosFecha = today;
+    save();
+  }
+  if (S.todayFecha !== today) {
+    S.todayEntreno = false;
+    S.todaySueno = null;
+    S.todayFecha = today;
+    save();
+  }
+})();
+
+// Temp state (not persisted)
+let haltSelected = [];
+let haltCheckinSelected = [];
+let checkinData = { control: null, reglas: null };
+let emgInterval = null;
+let protoStep = 1;
+
+// ══ SPLASH ════════════════════════════════════════════════════
+setTimeout(() => {
+  document.getElementById('splash').classList.add('out');
+  setTimeout(() => document.getElementById('splash').style.display = 'none', 800);
+}, 2600);
+
+// ══ NAVIGATION ════════════════════════════════════════════════
+function showPage(name, btn, resetProto) {
+  document.querySelectorAll('.pg').forEach(p => p.classList.remove('on'));
+  document.querySelectorAll('.nb').forEach(b => b.classList.remove('on'));
+  document.getElementById('pg-' + name).classList.add('on');
+  if (btn) btn.classList.add('on');
+  window.scrollTo(0, 0);
+  if (name === 'inicio') { renderStreak(); renderDailyFrase(); }
+  if (name === 'habitos') { renderHabitsMind(); renderFrases(); }
+  if (name === 'stats') renderStats();
+  if (name === 'proto' && resetProto) {
+    protoStep = 1;
+    showProtoStep(1);
+    haltSelected = [];
+    document.querySelectorAll('#haltGrid .halt-card').forEach(c => c.classList.remove('on'));
+    document.getElementById('haltResult').innerHTML = '';
+    document.getElementById('voteResult').innerHTML = '';
+    document.querySelectorAll('#contratoList .regla-check').forEach(c => {
+      c.classList.remove('on'); c.textContent = '';
+    });
+    document.querySelectorAll('#contratoList .regla-text').forEach(t => t.classList.remove('done'));
+    renderContratoList();
+  }
+}
+
+// ══ STREAK ════════════════════════════════════════════════════
+function renderStreak() {
+  const row = document.getElementById('streakRow');
+  if (!row) return;
+  const days = ['L','M','M','J','V','S','D'];
+  const conscientes = S.salidas.filter(s => s.consciente).length;
+  document.getElementById('streakNum').textContent = conscientes;
+  row.innerHTML = '';
+  days.forEach((d, i) => {
+    const div = document.createElement('div');
+    div.className = 'sday ' + (i < conscientes ? 'done' : i === 0 ? 'today' : 'empty');
+    div.textContent = d;
+    row.appendChild(div);
+  });
+}
+
+function renderDailyFrase() {
+  const el = document.getElementById('dailyFrase');
+  if (!el || S.frases.length === 0) return;
+  const idx = new Date().getDate() % S.frases.length;
+  el.textContent = '"' + S.frases[idx] + '"';
+}
+
+// ══ TODAY STATE ════════════════════════════════════════════════
+function setToday(field) {
+  if (field === 'entreno') {
+    S.todayEntreno = true;
+    const el = document.getElementById('statEntreno');
+    if (el) el.textContent = '✓';
+    save();
+  }
+  if (field === 'sueno') {
+    const inp = document.getElementById('suenoInput');
+    if (!inp || !inp.value) return;
+    S.todaySueno = parseFloat(inp.value);
+    const el = document.getElementById('statSueno');
+    if (el) el.textContent = S.todaySueno + 'h';
+    save();
+  }
+}
+
+// Restore today state on load
+(function restoreToday() {
+  if (S.todayEntreno) {
+    const el = document.getElementById('statEntreno');
+    if (el) el.textContent = '✓';
+  }
+  if (S.todaySueno !== null) {
+    const el = document.getElementById('statSueno');
+    if (el) el.textContent = S.todaySueno + 'h';
+  }
+})();
+
+// ══ PROTOCOLO PRE-SALIDA ══════════════════════════════════════
+function showProtoStep(n) {
+  [1,2,3,4].forEach(i => {
+    const el = document.getElementById('proto-' + i);
+    if (el) el.style.display = i === n ? 'block' : 'none';
+  });
+  protoStep = n;
+  window.scrollTo(0, 0);
+  if (n === 2) renderContratoList();
+  if (n === 4) renderFrasesProto();
+}
+
+// HALT
+const HALT_MSGS = {
+  hambre: "Tu energía está baja. Comé algo antes de salir — en serio. Un cerebro sin glucosa toma peores decisiones.",
+  enojo: "Estás saliendo desde la frustración. El alcohol va a amplificar eso. Identificá qué te molestó antes de que el entorno lo decida por vos.",
+  soledad: "La soledad es el disparador más común del consumo excesivo. Salir desde ese lugar lleva a buscar conexión de cualquier forma. Sé consciente esta noche.",
+  cansancio: "Con menos de 6hs de sueño, tu corteza prefrontal funciona al 60%. El control de impulsos ya está reducido antes del primer trago."
+};
+
+function toggleHalt(el, type) {
+  el.classList.toggle('on');
+  const idx = haltSelected.indexOf(type);
+  if (idx === -1) haltSelected.push(type);
+  else haltSelected.splice(idx, 1);
+  const result = document.getElementById('haltResult');
+  if (!result) return;
+  if (haltSelected.length === 0) { result.innerHTML = ''; return; }
+  result.innerHTML = haltSelected.map(h =>
+    `<div class="box-warn" style="margin-bottom:8px;margin-top:0"><strong>${h.charAt(0).toUpperCase()+h.slice(1)}:</strong> ${HALT_MSGS[h]}</div>`
+  ).join('');
+}
+
+// Contrato
+function renderContratoList() {
+  const list = document.getElementById('contratoList');
+  if (!list) return;
+  list.innerHTML = S.reglas.map((r, i) => `
+    <div class="regla-item">
+      <div class="regla-check" onclick="toggleReglaCheck(this)"></div>
+      <div class="regla-text">${r}</div>
+    </div>`).join('');
+}
+
+function toggleReglaCheck(el) {
+  el.classList.toggle('on');
+  el.textContent = el.classList.contains('on') ? '✓' : '';
+  const txt = el.nextElementSibling;
+  if (txt) txt.classList.toggle('done', el.classList.contains('on'));
+}
+
+function renderFrasesProto() {
+  const container = document.getElementById('frasesProto');
+  if (!container) return;
+  container.innerHTML = S.frases.map(f =>
+    `<div class="frase-card"><div class="frase-text">"${f}"</div><div class="frase-meta">Tu yo racional</div></div>`
+  ).join('');
+}
+
+// Identity vote
+function voteIdentity(choice) {
+  const result = document.getElementById('voteResult');
+  if (!result) return;
+  if (choice === 'si') {
+    result.innerHTML = '<div class="box-ok">Ese es el voto. Cada vez que elegís cuidarte, construís la identidad de la persona que querés ser. James Clear: "No sos alguien que quiere ser disciplinado. Sos alguien disciplinado."</div>';
+  } else {
+    result.innerHTML = '<div class="box-info">Intentarlo ya es suficiente para empezar. El objetivo no es la perfección — es la consciencia. Acordate de esta pantalla cuando estés por pasarte de la raya.</div>';
+  }
+  setTimeout(() => showProtoStep(4), 1800);
+}
+
+// Finish protocol
+function finishProtocol() {
+  S.streak++;
+  save();
+  showPage('inicio', document.querySelector('.nb'), false);
+  document.querySelector('.nb').classList.add('on');
+  renderStreak();
+}
+
+// ══ EMERGENCY ═════════════════════════════════════════════════
+function openEmergency() {
+  document.getElementById('emgOverlay').classList.add('on');
+  let secs = 60;
+  const timer = document.getElementById('emgTimer');
+  if (timer) timer.textContent = secs;
+  emgInterval = setInterval(() => {
+    secs--;
+    if (timer) timer.textContent = secs;
+    if (secs <= 0) clearInterval(emgInterval);
+  }, 1000);
+}
+
+function closeEmergency(choice) {
+  clearInterval(emgInterval);
+  document.getElementById('emgOverlay').classList.remove('on');
+  if (choice === 'call') {
+    const msg = encodeURIComponent('Hola, necesito hablar. Estoy en el límite y quiero apoyo.');
+    window.location.href = 'sms:?body=' + msg;
+  }
+}
+
+// ══ CHECK-IN ══════════════════════════════════════════════════
+function openCheckin() {
+  checkinData = { control: null, reglas: null };
+  haltCheckinSelected = [];
+  document.querySelectorAll('#controlScale .scbtn').forEach(b => b.classList.remove('on'));
+  document.querySelectorAll('#haltCheckinGrid .halt-card').forEach(c => c.classList.remove('on'));
+  const nota = document.getElementById('checkinNota');
+  if (nota) nota.value = '';
+  document.getElementById('checkinModal').classList.add('on');
+}
+
+function closeCheckin() {
+  document.getElementById('checkinModal').classList.remove('on');
+}
+
+function setScale(field, val, btn) {
+  checkinData[field] = val;
+  const parent = btn.parentElement;
+  parent.querySelectorAll('.scbtn').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+}
+
+function toggleHaltCheckin(el, type) {
+  el.classList.toggle('on');
+  const idx = haltCheckinSelected.indexOf(type);
+  if (idx === -1) haltCheckinSelected.push(type);
+  else haltCheckinSelected.splice(idx, 1);
+}
+
+function saveCheckin() {
+  if (!checkinData.control) {
+    alert('Por favor indicá cómo te manejaste esta noche (1-5).');
+    return;
+  }
+  const nota = document.getElementById('checkinNota');
+  const entry = {
+    fecha: new Date().toLocaleDateString('es-AR'),
+    control: checkinData.control,
+    reglas: checkinData.reglas || 'parcial',
+    halt: [...haltCheckinSelected],
+    nota: nota ? nota.value.trim() : '',
+    consciente: checkinData.control >= 4
+  };
+  S.salidas.push(entry);
+  if (S.salidas.length > 200) S.salidas.shift();
+  if (entry.consciente) S.streak++;
+  save();
+  closeCheckin();
+  renderStreak();
+  alert('✓ Check-in guardado. Cada registro es datos para entenderte mejor.');
+}
+
+// ══ BRAIN ═════════════════════════════════════════════════════
+const BRAIN_DATA = {
+  prefrontal: {
+    title: 'Corteza Prefrontal',
+    body: 'El freno del cerebro. Controla decisiones, control de impulsos y planificación a largo plazo. El alcohol la inhibe directamente — por eso no podés parar. El ejercicio la fortalece estructuralmente.',
+    efectos: {
+      ejercicio: { color: 'var(--green)', text: '✓ Se fortalece con entrenamiento regular' },
+      alcohol: { color: 'var(--red)', text: '✗ Se inhibe — control de impulsos a 0' },
+      mdma: { color: 'var(--red)', text: '✗ Reducida temporalmente' },
+      sueno: { color: 'var(--green)', text: '✓ Se consolida durante el sueño profundo' },
+      sertralina: { color: 'var(--blue)', text: '~ Sertralina la estabiliza emocionalmente' },
+      meditacion: { color: 'var(--green)', text: '✓ Meditación la entrena y engrosa' }
+    }
+  },
+  limbico: {
+    title: 'Sistema Límbico',
+    body: 'El acelerador. Procesa emociones, impulsos y respuestas inmediatas. Cuando supera a la corteza prefrontal, el impulso gana. El MDMA lo hiperactiva. La meditación entrena la corteza para regularlo.',
+    efectos: {
+      ejercicio: { color: 'var(--amber)', text: '~ Se equilibra con entrenamiento regular' },
+      alcohol: { color: 'var(--red)', text: '✗ Se descontrola al inhibirse el freno prefrontal' },
+      mdma: { color: 'var(--red)', text: '✗ Hiperactivo durante el consumo' },
+      sueno: { color: 'var(--green)', text: '✓ Se regula con sueño de calidad' },
+      clonazepam: { color: 'var(--blue)', text: '~ Clonazepam lo modera temporalmente' }
+    }
+  },
+  hipocampo: {
+    title: 'Hipocampo',
+    body: 'La memoria y el aprendizaje. Registra experiencias y forma nuevos hábitos. El alcohol en exceso reduce la neurogénesis aquí. El ejercicio es el único estimulante no farmacológico de neurogénesis demostrado.',
+    efectos: {
+      ejercicio: { color: 'var(--green)', text: '✓ Crece y forma nuevas neuronas' },
+      alcohol: { color: 'var(--red)', text: '✗ Reduce neurogénesis en exceso crónico' },
+      mdma: { color: 'var(--red)', text: '✗ Daño acumulativo con uso frecuente' },
+      sueno: { color: 'var(--green)', text: '✓ Consolida la memoria durante el sueño' },
+      sertralina: { color: 'var(--green)', text: '✓ Mejora la neurogénesis hipocámpica' }
+    }
+  },
+  amigdala: {
+    title: 'Amígdala',
+    body: 'El detector de amenaza y miedo. Hiperactiva en ansiedad. El clonazepam la modera. La meditación reduce su reactividad a largo plazo. El MDMA la desactiva artificialmente — por eso sentís euforia sin miedo.',
+    efectos: {
+      ejercicio: { color: 'var(--green)', text: '✓ Reduce su reactividad a largo plazo' },
+      alcohol: { color: 'var(--amber)', text: '~ Inicialmente calma, luego dispara rebote' },
+      mdma: { color: 'var(--red)', text: '✗ Desactivación artificial — rebote posterior' },
+      meditacion: { color: 'var(--green)', text: '✓ Reduce reactividad más que cualquier fármaco' },
+      clonazepam: { color: 'var(--blue)', text: '✓ La modera — es su función principal' }
+    }
+  },
+  accumbens: {
+    title: 'Núcleo Accumbens',
+    body: 'El centro de recompensa. Libera dopamina cuando anticipás o recibís una recompensa. Las drogas lo hiperestimulan → el cerebro baja la sensibilidad → necesitás más para sentir lo mismo. El ejercicio libera dopamina de forma sana.',
+    efectos: {
+      ejercicio: { color: 'var(--green)', text: '✓ Dopamina sana y sostenible' },
+      alcohol: { color: 'var(--red)', text: '✗ Hiperestimulación → sensibilidad baja' },
+      mdma: { color: 'var(--red)', text: '✗ Depleción severa post-consumo (3–7 días)' },
+      sueno: { color: 'var(--green)', text: '✓ Restaura la sensibilidad dopaminérgica' },
+      sertralina: { color: 'var(--blue)', text: '~ Equilibra dopamina y serotonina' }
+    }
+  },
+  cerebelo: {
+    title: 'Cerebelo',
+    body: 'Coordinación, equilibrio y movimiento fino. El alcohol lo afecta primero — por eso perdés el equilibrio antes de perder la consciencia. El entrenamiento de fuerza fortalece las conexiones cerebelosas.',
+    efectos: {
+      ejercicio: { color: 'var(--green)', text: '✓ Fortalece conexiones motoras' },
+      alcohol: { color: 'var(--red)', text: '✗ Primera zona afectada — pierde coordinación' },
+      mdma: { color: 'var(--amber)', text: '~ Afecta coordinación fina' },
+      sueno: { color: 'var(--green)', text: '✓ Consolida la memoria motora' }
+    }
+  }
+};
+
+function showBrain(zone) {
+  const data = BRAIN_DATA[zone];
+  if (!data) return;
+  document.getElementById('brainPanelZone').textContent = 'Zona cerebral';
+  document.getElementById('brainPanelTitle').textContent = data.title;
+  document.getElementById('brainPanelBody').textContent = data.body;
+  const effects = document.getElementById('brainPanelEffects');
+  effects.innerHTML = Object.entries(data.efectos).map(([k, v]) =>
+    `<div style="font-size:12px;color:${v.color};padding:4px 0;border-bottom:.5px solid var(--border)">${v.text}</div>`
+  ).join('');
+  const panel = document.getElementById('brainPanel');
+  panel.style.display = 'block';
+  panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+// ══ HÁBITOS ═══════════════════════════════════════════════════
+const HABIT_DEFS = [
+  { key: 'entreno', icon: '💪', label: 'Entrenaste hoy' },
+  { key: 'proteina', icon: '🥩', label: 'Alcanzaste 155g de proteína' },
+  { key: 'creatina', icon: '⚡', label: 'Tomaste creatina (5g)' },
+  { key: 'agua', icon: '💧', label: 'Tomaste 3 litros de agua' },
+  { key: 'meditacion', icon: '🧘', label: 'Meditaste 5 minutos' },
+  { key: 'sueno', icon: '😴', label: 'Dormiste 7+ horas' }
+];
+
+function renderHabitsMind() {
+  const container = document.getElementById('habitListMind');
+  if (!container) return;
+  container.innerHTML = '';
+  HABIT_DEFS.forEach(h => {
+    const div = document.createElement('div');
+    div.className = 'hitem';
+    const check = document.createElement('div');
+    check.className = 'hcheck' + (S.habitos[h.key] ? ' on' : '');
+    check.textContent = S.habitos[h.key] ? '✓' : '';
+    check.onclick = () => {
+      S.habitos[h.key] = !S.habitos[h.key];
+      check.classList.toggle('on', S.habitos[h.key]);
+      check.textContent = S.habitos[h.key] ? '✓' : '';
+      lbl.classList.toggle('done', S.habitos[h.key]);
+      updateHabitScoreMind();
+    };
+    const lbl = document.createElement('div');
+    lbl.className = 'hlabel' + (S.habitos[h.key] ? ' done' : '');
+    lbl.textContent = h.icon + ' ' + h.label;
+    div.appendChild(check);
+    div.appendChild(lbl);
+    container.appendChild(div);
+  });
+  updateHabitScoreMind();
+}
+
+function updateHabitScoreMind() {
+  const score = Object.values(S.habitos).filter(Boolean).length;
+  const el = document.getElementById('habitScoreMind');
+  if (el) el.textContent = 'Score: ' + score + '/6';
+}
+
+function saveHabitsMind() {
+  save();
+  const btn = event.target;
+  btn.textContent = '¡Guardado! ✓';
+  btn.style.background = 'var(--green)';
+  setTimeout(() => { btn.textContent = 'Guardar ✓'; btn.style.background = 'var(--accent)'; }, 2000);
+}
+
+// ══ FRASES ════════════════════════════════════════════════════
+function renderFrases() {
+  const container = document.getElementById('frasesContainer');
+  if (!container) return;
+  if (S.frases.length === 0) {
+    container.innerHTML = '<div style="font-size:13px;color:var(--text3)">Aún no hay frases guardadas. Escribí la primera.</div>';
+    return;
+  }
+  container.innerHTML = S.frases.map((f, i) => `
+    <div class="frase-card" style="display:flex;justify-content:space-between;align-items:flex-start">
+      <div>
+        <div class="frase-text">"${f}"</div>
+        <div class="frase-meta">Tu yo racional</div>
+      </div>
+      <button onclick="borrarFrase(${i})" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:16px;flex-shrink:0;padding:0 0 0 8px">✕</button>
+    </div>`).join('');
+}
+
+function guardarFrase() {
+  const inp = document.getElementById('nuevaFrase');
+  if (!inp) return;
+  const val = inp.value.trim();
+  if (!val) { alert('Escribí algo primero.'); return; }
+  S.frases.push(val);
+  inp.value = '';
+  save();
+  renderFrases();
+  renderDailyFrase();
+}
+
+function borrarFrase(idx) {
+  if (!confirm('¿Borrar esta frase?')) return;
+  S.frases.splice(idx, 1);
+  save();
+  renderFrases();
+}
+
+// ══ CONTRATO MODAL ════════════════════════════════════════════
+function openContratoModal() {
+  renderContratoEditList();
+  document.getElementById('contratoModal').classList.add('on');
+}
+
+function closeContratoModal() {
+  document.getElementById('contratoModal').classList.remove('on');
+  renderContratoList();
+}
+
+function renderContratoEditList() {
+  const list = document.getElementById('contratoEditList');
+  if (!list) return;
+  list.innerHTML = S.reglas.map((r, i) => `
+    <div class="regla-item">
+      <div class="regla-text" style="flex:1">${r}</div>
+      <button onclick="deleteRegla(${i})" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:18px;flex-shrink:0">✕</button>
+    </div>`).join('');
+}
+
+function deleteRegla(idx) {
+  if (idx < 0 || idx >= S.reglas.length) return;
+  S.reglas.splice(idx, 1);
+  save();
+  renderContratoEditList();
+}
+
+function agregarRegla() {
+  const inp = document.getElementById('nuevaRegla');
+  if (!inp) return;
+  const val = inp.value.trim();
+  if (!val) { alert('Escribí la regla primero.'); return; }
+  S.reglas.push(val);
+  inp.value = '';
+  save();
+  renderContratoEditList();
+}
+
+// ══ ESTADÍSTICAS ══════════════════════════════════════════════
+function renderStats() {
+  const c = document.getElementById('statsContainer');
+  if (!c) return;
+  c.innerHTML = '';
+
+  // Resumen salidas
+  const total = S.salidas.length;
+  const conscientes = S.salidas.filter(s => s.consciente).length;
+  const pctControl = total > 0 ? Math.round(conscientes / total * 100) : 0;
+  const avgControl = total > 0 ? (S.salidas.reduce((a, s) => a + s.control, 0) / total).toFixed(1) : '—';
+
+  const sumCard = document.createElement('div');
+  sumCard.className = 'card';
+  sumCard.innerHTML = `
+    <div class="cl">Resumen de salidas</div>
+    <div class="stat-grid">
+      <div class="stat-card"><div class="stat-val">${total}</div><div class="stat-label">Total</div></div>
+      <div class="stat-card"><div class="stat-val" style="color:var(--green)">${conscientes}</div><div class="stat-label">Conscientes</div></div>
+      <div class="stat-card"><div class="stat-val">${avgControl}</div><div class="stat-label">Control prom.</div></div>
+    </div>
+    <div class="pbar" style="margin-top:10px">
+      <div class="prow"><span class="pn">Salidas con control</span><span class="pv" style="color:${pctControl>=70?'var(--green)':pctControl>=40?'var(--amber)':'var(--red)'}">${pctControl}%</span></div>
+      <div class="ptrack"><div class="pfill" style="width:${pctControl}%;background:${pctControl>=70?'var(--green)':pctControl>=40?'var(--amber)':'var(--red)'}"></div></div>
+    </div>`;
+  c.appendChild(sumCard);
+
+  // Tendencia control (últimas 10 salidas)
+  if (S.salidas.length >= 2) {
+    const trendCard = document.createElement('div');
+    trendCard.className = 'card';
+    const last10 = S.salidas.slice(-10);
+    const W = 260, H = 80;
+    const mapped = last10.map((s, i) => ({
+      x: (16 + i * (W - 32) / (last10.length - 1)).toFixed(1),
+      y: (H - 10 - ((s.control - 1) / 4) * (H - 20)).toFixed(1),
+      ok: s.consciente
+    }));
+    const path = mapped.map((p, i) => (i === 0 ? `M${p.x},${p.y}` : `L${p.x},${p.y}`)).join(' ');
+    trendCard.innerHTML = `
+      <div class="cl">Tendencia de control · últimas ${last10.length} salidas</div>
+      <svg viewBox="0 0 ${W} ${H}" style="width:100%;margin-top:8px">
+        ${[1,2,3,4,5].map(v => {
+          const y = (H - 10 - ((v-1)/4*(H-20))).toFixed(1);
+          return `<text x="12" y="${y}" font-size="8" fill="var(--text3)" text-anchor="end">${v}</text>
+                  <line x1="16" y1="${y}" x2="${W-4}" y2="${y}" stroke="var(--border)" stroke-width="0.5" stroke-dasharray="2,2"/>`;
+        }).join('')}
+        <path d="${path}" fill="none" stroke="var(--accent2)" stroke-width="2" stroke-linejoin="round"/>
+        ${mapped.map(p => `<circle cx="${p.x}" cy="${p.y}" r="4" fill="${p.ok?'var(--green)':'var(--red)'}" />`).join('')}
+      </svg>
+      <div style="display:flex;gap:12px;margin-top:4px">
+        <span style="font-size:10px;color:var(--green)">● Consciente</span>
+        <span style="font-size:10px;color:var(--red)">● Difícil</span>
+      </div>`;
+    c.appendChild(trendCard);
+  }
+
+  // HALT patterns
+  const haltTotals = { hambre:0, enojo:0, soledad:0, cansancio:0 };
+  S.salidas.forEach(s => s.halt.forEach(h => { if (haltTotals[h] !== undefined) haltTotals[h]++; }));
+  const totalHalt = Object.values(haltTotals).reduce((a, b) => a + b, 0) || 1;
+  const haltColors = { hambre:'var(--amber)', enojo:'var(--red)', soledad:'var(--accent)', cansancio:'var(--blue)' };
+  const haltLabels = { hambre:'Hambre / energía baja', enojo:'Enojo / frustración', soledad:'Soledad', cansancio:'Cansancio' };
+
+  const haltCard = document.createElement('div');
+  haltCard.className = 'card';
+  haltCard.innerHTML = '<div class="cl">Disparadores HALT acumulados</div>';
+  Object.entries(haltTotals)
+    .sort((a, b) => b[1] - a[1])
+    .forEach(([k, v]) => {
+      const pct = Math.round(v / totalHalt * 100);
+      haltCard.innerHTML += `
+        <div class="pbar">
+          <div class="prow"><span class="pn">${haltLabels[k]}</span><span class="pv" style="color:${haltColors[k]}">${pct}% · ${v}x</span></div>
+          <div class="ptrack"><div class="pfill" style="width:${pct}%;background:${haltColors[k]}"></div></div>
+        </div>`;
+    });
+  haltCard.innerHTML += '<div class="box-info">Tu disparador más frecuente es lo que más trabaja tu psicóloga. Mostrá esta pantalla en tu próxima sesión.</div>';
+  c.appendChild(haltCard);
+
+  // Hábitos consistencia
+  const habCard = document.createElement('div');
+  habCard.className = 'card';
+  habCard.innerHTML = '<div class="cl">Consistencia de hábitos · últimos 30 días</div>';
+  const hist30 = S.habitosHistorial.slice(-30);
+  HABIT_DEFS.forEach(h => {
+    const count = hist30.filter(d => d[h.key]).length;
+    const pct = hist30.length ? Math.round(count / hist30.length * 100) : 0;
+    habCard.innerHTML += `
+      <div class="pbar">
+        <div class="prow"><span class="pn">${h.icon} ${h.label}</span><span class="pv">${pct}%</span></div>
+        <div class="ptrack"><div class="pfill" style="width:${pct}%;background:var(--accent)"></div></div>
+      </div>`;
+  });
+  if (hist30.length === 0) habCard.innerHTML += '<div style="font-size:13px;color:var(--text3)">Empezá a marcar hábitos en la sección Hábitos para ver tu consistencia aquí.</div>';
+  c.appendChild(habCard);
+
+  // Historial de salidas
+  const histCard = document.createElement('div');
+  histCard.className = 'card';
+  histCard.innerHTML = '<div class="cl">Historial de salidas</div>';
+  if (S.salidas.length === 0) {
+    histCard.innerHTML += '<div style="font-size:13px;color:var(--text3)">Aún no hay salidas registradas. Usá el check-in de regreso después de cada salida.</div>';
+  } else {
+    histCard.innerHTML += S.salidas.slice(-5).reverse().map(s => `
+      <div style="padding:10px 0;border-bottom:.5px solid var(--border)">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px">
+          <span style="font-size:13px;color:var(--text)">${s.fecha}</span>
+          <span class="badge ${s.consciente?'bg-green':'bg-red'}">${s.consciente?'Consciente':'Difícil'}</span>
+        </div>
+        <div style="font-size:11px;color:var(--text2)">Control: ${s.control}/5 · Reglas: ${s.reglas}${s.halt.length?' · '+s.halt.join(', '):''}</div>
+        ${s.nota?`<div style="font-size:11px;color:var(--text3);margin-top:3px;font-style:italic">"${s.nota}"</div>`:''}
+      </div>`).join('');
+  }
+  c.appendChild(histCard);
+
+  // Exportar para psicóloga
+  const expCard = document.createElement('div');
+  expCard.innerHTML = `<button class="btn" style="margin-top:4px" onclick="exportReport()">Exportar para mi psicóloga<span class="btn-sub">Genera un resumen listo para compartir por WhatsApp</span></button>`;
+  c.appendChild(expCard);
+
+  // Reset
+  const resetDiv = document.createElement('div');
+  resetDiv.innerHTML = `<button class="btn ghost" onclick="borrarDatos()">Borrar todos los datos</button>`;
+  c.appendChild(resetDiv);
+}
+
+// ══ EXPORT ════════════════════════════════════════════════════
+function exportReport() {
+  const total = S.salidas.length;
+  const conscientes = S.salidas.filter(s => s.consciente).length;
+  const haltTotals = { hambre:0, enojo:0, soledad:0, cansancio:0 };
+  S.salidas.forEach(s => s.halt.forEach(h => { if (haltTotals[h] !== undefined) haltTotals[h]++; }));
+  const topHalt = Object.entries(haltTotals).sort((a,b)=>b[1]-a[1])[0];
+
+  const texto = `LP MIND — REPORTE PARA TERAPIA
+Fecha: ${new Date().toLocaleDateString('es-AR')}
+
+SALIDAS:
+• Total registradas: ${total}
+• Conscientes (control ≥4): ${conscientes}
+• Porcentaje con control: ${total>0?Math.round(conscientes/total*100):0}%
+
+DISPARADOR MÁS FRECUENTE:
+• ${topHalt ? topHalt[0]+' ('+topHalt[1]+' veces)' : 'Sin datos aún'}
+
+ÚLTIMAS NOTAS:
+${S.salidas.filter(s=>s.nota).slice(-3).map(s=>`• ${s.fecha}: "${s.nota}"`).join('\n') || '• Sin notas registradas'}
+
+HÁBITOS (promedio 30 días):
+${S.habitosHistorial.length > 0 ?
+  Object.entries(S.habitos).map(([k]) => {
+    const count = S.habitosHistorial.slice(-30).filter(d=>d[k]).length;
+    const total30 = S.habitosHistorial.slice(-30).length || 1;
+    return `• ${k}: ${Math.round(count/total30*100)}%`;
+  }).join('\n') : '• Sin historial aún'}
+
+Generado por LP Mind`;
+
+  if (navigator.share) {
+    navigator.share({ title: 'LP Mind — Reporte para terapia', text: texto });
+  } else {
+    const el = document.createElement('textarea');
+    el.value = texto;
+    el.style.position = 'fixed';
+    el.style.opacity = '0';
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
+    alert('✓ Reporte copiado. Pegalo en WhatsApp para tu psicóloga.');
+  }
+}
+
+function borrarDatos() {
+  if (confirm('¿Borrar todos los datos de LP Mind? Esta acción no se puede deshacer.')) {
+    localStorage.removeItem(KEY);
+    location.reload();
+  }
+}
+
+// ══ INIT ══════════════════════════════════════════════════════
+renderStreak();
+renderDailyFrase();
+</script>
+</body>
+</html>
