@@ -1236,6 +1236,46 @@ function borrarDatos() {
   }
 }
 
+// ══ GOOGLE SHEETS ═════════════════════════════════════════
+const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbwX1Enlqjhu8wmEVQe33f-SbSAta9vYcR1zSyvLIg0s8D_7TUD57CsOwsnNj_EZlLwG-Q/exec';
+
+async function enviarSheets(tipo, datos) {
+  try {
+    await fetch(SHEETS_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({tipo, ...datos})
+    });
+  } catch(e) { console.log('Sheets offline:', e); }
+}
+
+// Patch saveCheckin para enviar a Sheets
+const _saveCheckin = saveCheckin;
+saveCheckin = function() {
+  if (checkinData.control) {
+    enviarSheets('salida', {
+      fecha: new Date().toLocaleDateString('es-AR'),
+      control: checkinData.control,
+      consciente: checkinData.control >= 4,
+      halt: haltCheckinSelected,
+      reglas: checkinData.reglas || 'parcial',
+      nota: document.getElementById('checkinNota')?.value?.trim() || ''
+    });
+  }
+  _saveCheckin();
+};
+
+// Patch saveHabitsMind para enviar a Sheets
+const _saveHabitsMind = saveHabitsMind;
+saveHabitsMind = function() {
+  enviarSheets('habitos', {
+    fecha: new Date().toLocaleDateString('es-AR'),
+    ...S.habitos
+  });
+  _saveHabitsMind();
+};
+
 // ══ INIT ══════════════════════════════════════════════════════
 renderStreak();
 renderDailyFrase();
